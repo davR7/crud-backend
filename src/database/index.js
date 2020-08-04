@@ -7,6 +7,7 @@ const options = {
     useCreateIndex: true,
     useUnifiedTopology: true,
     useNewUrlParser: true,
+    useFindAndModify: false,
     promiseLibrary: global.Promise
 }
 
