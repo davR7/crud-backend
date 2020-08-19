@@ -4,7 +4,7 @@ module.exports = {
     async findAll(req, res, next) {
         try {
             const page = parseInt(req.query.page) || 1
-            const limit = 5
+            const limit = parseInt(req.query.limit) || 0
             
             const data = await users.find().limit(limit)
                 .skip((page - 1) * limit).exec()
@@ -13,8 +13,8 @@ module.exports = {
 
             res.header('X-Total-Count', count)
             return res.json({
-                data,
-                count,
+                users: data,
+                totalcount: count,
                 limit,
                 page
             })
@@ -40,8 +40,11 @@ module.exports = {
         const userId = req.params.id
 
         try {
-            await users.findByIdAndUpdate(userId, user)
-            return res.send()
+            const dbUser = await users.findByIdAndUpdate(userId, user)
+            if (!dbUser){
+                return res.status(204).json()
+            }
+            return res.json()
         } catch(error) {
             next(error)
         }
@@ -50,11 +53,12 @@ module.exports = {
         const userId = req.params.id
 
         try {
-            const delrow = await users.findByIdAndRemove(userId)
-            if (!delrow) throw Error('User not found')
-            return res.send()
+            const dbUser = await users.findByIdAndRemove(userId)
+            if (!dbUser){
+                return res.status(204).json()
+            }
+            return res.json()
         } catch(error) {
-            error.status = 400
             next(error)
         }
     }

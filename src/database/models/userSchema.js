@@ -5,21 +5,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         validate: {
             validator(v){
-              return /^[a-z][a-z\s]*$/i.test(v)
+              return /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/i.test(v)
             },
-            message: props => `${props.value} is not a valid name!`
+            message: props => `Name format is invalid!`
         },
         required: [true, "Please enter name."]
-    },
-    fone: {
-        type: String,
-        validate: {
-            validator(v){
-              return /^[0-9]*$/.test(v)
-            },
-            message: props => `${props.value} is not a valid fone!`
-        },
-        required: [true, "Please enter fone."]
     },
     email: {
         type: String,
@@ -27,11 +17,21 @@ const userSchema = new mongoose.Schema({
             validator(v){
               return /\S+@\S+\.\S+/.test(v)
             },
-            message: props => `${props.value} is not a valid email!`
+            message: props => `Email format is invalid!`
         },
         unique: [true, "Email must be unique."],
         lowercase: true,
         required: [true, "Please enter email."]
+    },
+    phone: {
+        type: String,
+        validate: {
+            validator(v){
+              return /^[0-9]*$/.test(v)
+            },
+            message: props => `Phone format is invalid!`
+        },
+        required: [true, "Please enter phone."]
     }
 })
 
