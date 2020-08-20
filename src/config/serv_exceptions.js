@@ -7,5 +7,5 @@ exports.errorHandler = (error, res) => {
     }
     const { status, message } = error
     res.status(status || 500)
-    res.json({ error: error })
+    res.json({ error: error.message })
 }
